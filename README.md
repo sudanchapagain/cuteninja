@@ -1,18 +1,17 @@
-# Jinja KDL
+# cuteninja
 
-a python package that allows you to use [KDL](https://kdl.dev) as
-markup with Jinja2 syntax support.
+A python package that allows you to use [KDL](https://kdl.dev) as the markup
+with Jinja2 syntax support.
 
-Why? Because KDL is much more readable than HTML. While looking
-through the KDL repository I found a example file that used KDL
-as an alternative of HTML. That was what give me the intial
-idea of using KDL as the markup with Jinja in Python for succint
-and maintainable template.
+Why? Because KDL is much more readable than HTML. While looking through
+the KDL repository I found a example file that used KDL as an alternative
+of HTML. That was what give me the initial idea of using KDL as the markup
+with Jinja in Python for succint and maintainable template.
 
-This packages doesn't do much, it extract the Jinja syntax from
-source files and then parses the KDL via kdl-rs which generates
-HTML. The previously extracted Jinja syntax is restored and
-returned as valid HTML with Jinja syntax. i.e.
+This packages doesn't do much, it extract the Jinja syntax from source files
+and then parses the KDL via kdl-rs which generates the HTML. The previously
+extracted Jinja syntax is restored and returned as valid HTML with Jinja
+syntax. i.e.
 
 ```kdl
 !DOCTYPE html
@@ -37,7 +36,7 @@ html lang=en {
 
 is turned to the following:
 
-```html
+```jinja
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -60,15 +59,14 @@ is turned to the following:
 
 ## Contributing
 
-This is an early-stage project with lots of room for improvement. You are welcome to
-help out in any shape or form.
+This is an early-stage project with lots of room for improvement. You are
+welcome to help out in any shape or form.
 
 ## License
 
-Apache-2.0 (same as kdl-rs)
+MIT
 
 ## Credits
 
 - [KDL Document Language](https://kdl.dev)
 - [kdl-rs](https://github.com/kdl-org/kdl-rs)
-- [Jinja2](https://jinja.palletsprojects.com/)
