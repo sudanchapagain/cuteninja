@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class KdlParseError(Exception):
     """Error raised when KDL parsing fails."""
 
@@ -5,8 +8,15 @@ class KdlParseError(Exception):
 try:
     import ckdl
 
-    def parse(source: str):
-        """parse KDL source using ckdl."""
+    def parse(source: str) -> Any:
+        """Parse KDL source using ckdl.
+
+        Args:
+            source: KDL markup as string
+
+        Returns:
+            Parsed KDL document
+        """
         return ckdl.parse(source)
 
     Document = ckdl.Document
@@ -14,18 +24,25 @@ try:
 
 except ImportError:
 
-    def parse(source: str):
-        """parse KDL source: requires ckdl to be installed."""
+    def parse(source: str) -> Any:
+        """Parse KDL source: requires ckdl to be installed.
+
+        Args:
+            source: KDL markup as string
+
+        Raises:
+            NotImplementedError: When ckdl is not installed
+        """
         raise NotImplementedError("ckdl not installed")
 
     class Document:
-        """Document class: requires kdl_rs_py to be installed."""
+        """Document class: requires ckdl to be installed."""
 
-        def __init__(self):
-            raise NotImplementedError("kdl_rs_py not installed")
+        def __init__(self) -> None:
+            raise NotImplementedError("ckdl not installed")
 
     class Node:
-        """Node class: requires kdl_rs_py to be installed."""
+        """Node class: requires ckdl to be installed."""
 
         pass
 

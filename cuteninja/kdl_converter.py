@@ -1,5 +1,10 @@
+from typing import Any, Dict, List, Set
+
+
 class KdlToHtmlConverter:
-    VOID_ELEMENTS = {
+    """Convert KDL document nodes to HTML."""
+
+    VOID_ELEMENTS: Set[str] = {
         # https://developer.mozilla.org/en-US/docs/Glossary/Void_element
         "area",
         "base",
@@ -17,13 +22,25 @@ class KdlToHtmlConverter:
         "wbr",
     }
 
-    SPECIAL_NODES = {"!doctype", "-"}
+    SPECIAL_NODES: Set[str] = {"!doctype", "-"}
 
-    def __init__(self, indent: str = "    ", format_output: bool = True):
+    indent: str
+    format_output: bool
+
+    def __init__(self, indent: str = "    ", format_output: bool = True) -> None:
         self.indent = indent
         self.format_output = format_output
 
-    def convert_node(self, node, level: int = 0) -> str:
+    def convert_node(self, node: Any, level: int = 0) -> str:
+        """Convert a KDL node to HTML.
+
+        Args:
+            node: KDL node object
+            level: Current indentation level
+
+        Returns:
+            HTML string representation of the node
+        """
         current_indent = self.indent * level if self.format_output else ""
         newline = "\n" if self.format_output else ""
 
@@ -42,7 +59,7 @@ class KdlToHtmlConverter:
 
         opening = f"{current_indent}<{tag_name}"
 
-        props = node.properties
+        props: Dict[str, Any] = node.properties
         for key, value in props.items():
             if isinstance(value, bool):
                 if value:
@@ -60,7 +77,7 @@ class KdlToHtmlConverter:
 
         opening += ">"
 
-        content_parts = []
+        content_parts: List[str] = []
 
         if node.args:
             text_content = " ".join(str(arg) for arg in node.args)
@@ -94,14 +111,31 @@ class KdlToHtmlConverter:
         else:
             return f"{opening}</{tag_name}>{newline}"
 
-    def convert_document(self, nodes) -> str:
-        parts = []
+    def convert_document(self, nodes: List[Any]) -> str:
+        """Convert a list of KDL nodes to HTML.
+
+        Args:
+            nodes: List of KDL node objects
+
+        Returns:
+            Complete HTML string
+        """
+        parts: List[str] = []
         for node in nodes:
             parts.append(self.convert_node(node, level=0))
         return "".join(parts)
 
 
 def parse_and_convert(kdl_source: str, format_output: bool = True) -> str:
+    """Parse KDL source and convert to HTML.
+
+    Args:
+        kdl_source: KDL markup as string
+        format_output: Whether to format the output
+
+    Returns:
+        HTML string
+    """
     from .kdl_bindings import parse
 
     doc = parse(kdl_source)

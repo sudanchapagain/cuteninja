@@ -1,9 +1,18 @@
+from typing import Dict
+
 from .jinja_processor import JinjaProcessor
 from .kdl_converter import KdlToHtmlConverter
 
 
 class KdlTemplate:
-    def __init__(self, source: str, format_output: bool = True):
+    original_source: str
+    format_output: bool
+    jinja_processor: JinjaProcessor
+    converter: KdlToHtmlConverter
+    token_map: Dict[str, str]
+    output: str
+
+    def __init__(self, source: str, format_output: bool = True) -> None:
         self.original_source = source
         self.format_output = format_output
         self.jinja_processor = JinjaProcessor()
@@ -11,7 +20,7 @@ class KdlTemplate:
 
         self._process()
 
-    def _process(self):
+    def _process(self) -> None:
         from .kdl_bindings import parse
 
         cleaned_kdl, self.token_map = self.jinja_processor.extract_jinja(
@@ -29,7 +38,7 @@ class KdlTemplate:
     def render(self) -> str:
         return self.output
 
-    def get_jinja_tokens(self):
+    def get_jinja_tokens(self) -> Dict[str, str]:
         return self.jinja_processor.get_source_map()
 
 

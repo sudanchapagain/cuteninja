@@ -1,20 +1,33 @@
 import re
-from typing import Tuple, Dict
+from typing import Dict, Pattern, Tuple
 
 
 class JinjaProcessor:
-    def __init__(self):
-        self.token_map: Dict[str, str] = {}
+    """Processor for extracting Jinja from KDL and subsequently restoring it in HTML."""
+
+    token_map: Dict[str, str]
+    token_counter: int
+
+    def __init__(self) -> None:
+        self.token_map = {}
         self.token_counter = 0
 
     def extract_jinja(self, source: str) -> Tuple[str, Dict[str, str]]:
+        """Extract Jinja blocks from source and replace with placeholders.
+
+        Args:
+            source: KDL source with Jinja syntax
+
+        Returns:
+            Tuple of cleaned KDL and mapping of placeholders to tokens
+        """
         self.token_map = {}
         self.token_counter = 0
 
         # pattern to match Jinja syntax: {{ }}, {% %}, {# #}
         pattern = r"(\{\{.*?\}\}|\{%.*?%\}|\{#.*?#\})"
 
-        def replace_jinja(match):
+        def replace_jinja(match: re.Match[str]) -> str:
             token = match.group(0)
             placeholder = f"__JINJA_{self.token_counter}__"
             self.token_map[placeholder] = token
@@ -30,7 +43,7 @@ class JinjaProcessor:
 
         # handle standalone single-line Jinja blocks
         lines = cleaned.split("\n")
-        final_lines = []
+        final_lines: list[str] = []
 
         for line in lines:
             stripped = line.strip()
@@ -45,10 +58,24 @@ class JinjaProcessor:
         return "\n".join(final_lines), self.token_map
 
     def restore_jinja(self, html: str, token_map: Dict[str, str]) -> str:
+        """Restore Jinja blocks from placeholders in HTML.
+
+        Args:
+            html: HTML with placeholders
+            token_map: Mapping of placeholders to Jinja tokens
+
+        Returns:
+            HTML with restored Jinja syntax
+        """
         result = html
         for placeholder, token in token_map.items():
             result = result.replace(placeholder, token)
         return result
 
     def get_source_map(self) -> Dict[str, str]:
+        """Get the current token mapping.
+
+        Returns:
+            Mapping of placeholders to Jinja tokens
+        """
         return self.token_map
