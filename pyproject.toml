@@ -1,6 +1,6 @@
 [project]
 name = "cuteninja"
-version = "0.1.1"
+version = "0.1.2"
 description = "KDL as HTML replacement for Jinja2 templates"
 readme = "README.md"
 requires-python = ">=3.8"
