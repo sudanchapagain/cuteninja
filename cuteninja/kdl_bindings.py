@@ -3,20 +3,20 @@ class KdlParseError(Exception):
 
 
 try:
-    import kdl_rs
+    import ckdl
 
     def parse(source: str):
-        """parse KDL source using kdl_rs_py."""
-        return kdl_rs.parse(source)
+        """parse KDL source using ckdl."""
+        return ckdl.parse(source)
 
-    Document = kdl_rs.Document
-    Node = kdl_rs.Node
+    Document = ckdl.Document
+    Node = ckdl.Node
 
 except ImportError:
 
     def parse(source: str):
-        """parse KDL source: requires kdl_rs_py to be installed."""
-        raise NotImplementedError("kdl_rs_py not installed")
+        """parse KDL source: requires ckdl to be installed."""
+        raise NotImplementedError("ckdl not installed")
 
     class Document:
         """Document class: requires kdl_rs_py to be installed."""

@@ -42,7 +42,7 @@ class KdlToHtmlConverter:
 
         opening = f"{current_indent}<{tag_name}"
 
-        props = node.props
+        props = node.properties
         for key, value in props.items():
             if isinstance(value, bool):
                 if value:
@@ -67,21 +67,21 @@ class KdlToHtmlConverter:
             content_parts.append(text_content)
 
         if node.children:
-            child_doc = node.children
+            children = node.children
             has_element_children = any(
                 child.name not in self.SPECIAL_NODES or child.name == "-"
-                for child in child_doc.nodes
+                for child in children
             )
 
             if has_element_children and self.format_output:
-                for child in child_doc.nodes:
+                for child in children:
                     child_html = self.convert_node(child, level + 1)
                     if child.name == "-":
                         content_parts.append(child_html)
                     else:
                         content_parts.append(newline + child_html)
             else:
-                for child in child_doc.nodes:
+                for child in children:
                     content_parts.append(self.convert_node(child, level + 1))
 
         if content_parts:
